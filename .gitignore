@@ -1,0 +1,9 @@
+/target
+/python/.venv
+__pycache__/
+# Wersja Rust - tylko lokalnie
+/src/*.rs
+/Cargo.toml
+/Cargo.lock
+/tests/bench/bench.ps1
+/tests/bench/wyniki.json

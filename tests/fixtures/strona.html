@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pl">
+<head><title>Test</title><style>body{}</style></head>
+<body>
+<nav>Menu główne <a href="/">Start</a></nav>
+<article>
+  <h1>Zażółć gęślą jaźń</h1>
+  <p>Pierwszy   akapit
+     tekstu. <a href="dalej">więcej</a></p>
+  <ul><li>punkt pierwszy</li><li>punkt drugi</li></ul>
+  <div hidden>ukryte</div>
+  <script>alert(1)</script>
+  <table>
+    <tr><th>Nazwa</th><th>Cena</th></tr>
+    <tr><td>Śruba</td><td>2 zł</td></tr>
+  </table>
+</article>
+<form action="/szukaj">
+  <input type="text" name="q" placeholder="Szukaj">
+  <input type="hidden" name="lang" value="pl">
+  <input type="submit" value="Szukaj">
+</form>
+<form action="/zamow" method="post">
+  <select name="kolor"><option value="r">Czerwony</option><option value="g">Zielony</option></select>
+  <input type="checkbox" name="zgoda" value="tak" checked>
+  <input type="checkbox" name="news" value="tak">
+  <button name="ok" value="1">Zamów</button>
+</form>
+<footer>Stopka</footer>
+</body>
+</html>
