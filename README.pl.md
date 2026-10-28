@@ -2,7 +2,7 @@
 
 [English](README.md) | **Polski**
 
-Lekka przeglądarka bez JavaScriptu dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
+Lekka przeglądarka dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
 zwraca zwięzły tekst, więc agent zużywa dużo mniej tokenów.
 
 Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
@@ -40,7 +40,7 @@ Tokeny szacowane jako znaki/4. Skrypt testowy: [tests/bench/sprawdz.ps1](tests/b
 
 ## Ograniczenia
 
-- Brak JavaScriptu: strony renderowane wyłącznie w JS (SPA) zwracają niewiele treści.
+- JavaScript tylko w opcjonalnym trybie JS (Chromium); bez niego strony renderowane wyłącznie w JS (SPA) zwracają niewiele treści.
 - Na niektórych stronach `read` zaczyna się od szumu (np. lista języków na Wikipedii) – wtedy lepiej użyć `extract`.
 - Brak kart, przewijania i zrzutów ekranu.
 

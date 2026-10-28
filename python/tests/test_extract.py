@@ -63,7 +63,34 @@ def test_prawie_pusta_strona():
 
     antybot = '<html><head><script src="/_Incapsula_Resource"></script></head><body><iframe></iframe></body></html>'
     assert prawie_pusta(antybot, BAZA)
+    assert prawie_pusta('<script src="app.js"></script><div id="root"></div><p>Ładowanie strony, proszę czekać na treść</p>' * 2, BAZA)
+    # Mała zwykła strona ze skryptem analityki (jak example.com) – bez Chromium
+    zwykla = "<html><script src=/s.js></script><body><h1>Example Domain</h1><p>" + "Tekst przykładowy. " * 6 + "</p></body></html>"
+    assert not prawie_pusta(zwykla, BAZA)
     assert not prawie_pusta(STRONA.replace("Pierwszy", "Pierwszy " * 50), BAZA)
+
+
+def test_filtr_chromium_blokuje_ssrf_i_obrazy():
+    from types import SimpleNamespace
+
+    from ai_browser.net import Siec
+    from ai_browser.render import Renderer
+
+    filtr = Renderer(Siec())._filtr
+    wyniki = []
+
+    def zadanie(url, typ="xhr"):
+        route = SimpleNamespace(request=SimpleNamespace(url=url, resource_type=typ),
+                                abort=lambda: wyniki.append((url, "abort")),
+                                continue_=lambda: wyniki.append((url, "ok")))
+        filtr(route)
+
+    zadanie("http://127.0.0.1/admin")
+    zadanie("http://169.254.169.254/latest/meta-data/")
+    zadanie("https://example.com/logo.png", "image")
+    zadanie("data:text/plain,abc")
+    zadanie("https://example.com/api")
+    assert [w for _, w in wyniki] == ["abort", "abort", "abort", "ok", "ok"]
 
 
 def test_adresy_prywatne():

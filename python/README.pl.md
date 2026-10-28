@@ -2,7 +2,7 @@
 
 [English](README.md) | **Polski**
 
-Lekka przeglądarka bez JavaScriptu dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
+Lekka przeglądarka dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
 zwraca zwięzły tekst: około 7 razy mniej tokenów przy czytaniu i około 180 razy mniej przy wyciąganiu danych selektorem CSS.
 
 Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
@@ -59,6 +59,30 @@ Wystarczy poprosić agenta zwykłym językiem, np.:
 Agent sam wybiera narzędzia: `navigate` otwiera stronę, `read` czyta tekst, `extract` wyciąga dane selektorem,
 `type`/`click` wypełniają formularze.
 
+### Opcjonalny tryb JavaScript (strony wymagające JS)
+
+Domyślnie ai-browser nie uruchamia JavaScriptu, więc strony zbudowane w całości w JS (aplikacje SPA) wyglądają
+na puste. Opcjonalny tryb JS to naprawia: gdy strona okaże się pusta, ai-browser otwiera ją w Chromium bez
+okna, czeka na wyrenderowanie i zwraca ten sam zwięzły tekst. Zwykłe strony nadal idą lekkim trybem.
+
+1. Jednorazowo zainstaluj Chromium (ok. 150 MB):
+
+```
+uvx --from "ai-browser[js]" playwright install chromium
+```
+
+2. Zamiast `uvx ai-browser` używaj `uvx --from "ai-browser[js]" ai-browser`:
+
+```
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js]" ai-browser
+```
+
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js]", "ai-browser"]`.
+
+Agent może też wymusić tryb JS przez `navigate(url, js=true)`. Wyłączenie: `AI_BROWSER_JS=0`.
+Chromium używa tego samego uczciwego User-Agenta, `robots.txt`, limitu tempa i blokady SSRF (sprawdzane jest
+każde jego żądanie). Zużycie pamięci rośnie do 150–300 MB tylko wtedy, gdy Chromium działa.
+
 ### Czy Claude użyje jej automatycznie?
 
 Zwykle tak: serwer przekazuje agentowi instrukcję (MCP server instructions), żeby wybierał go do czytania
@@ -81,7 +105,7 @@ Przy pierwszym użyciu Claude pyta o zgodę na uruchomienie narzędzi. Żeby nie
 
 - **`uvx` nie jest rozpoznawane** – po instalacji uv uruchom ponownie terminal / Claude Desktop.
 - **„robots.txt tej strony zabrania…”** – strona nie zgadza się na automaty; poszukaj jej oficjalnego API.
-- **Pusta treść** – strona działa tylko z JavaScriptem; ta przeglądarka go nie wykonuje.
+- **Pusta treść** – strona działa tylko z JavaScriptem: włącz opcjonalny tryb JS (opis wyżej).
 
 ## Ustawienia (zmienne środowiskowe)
 
@@ -94,7 +118,7 @@ Program przedstawia się uczciwie (User-Agent `ai-browser/<wersja>`), respektuje
 jedno żądanie na sekundę do jednego hosta i nie omija CAPTCHA ani zabezpieczeń antybotowych.
 Każda odpowiedź jest oznaczona jako niezaufane dane ze strony.
 
-Strony renderowane wyłącznie JavaScriptem (SPA) zwracają niewiele treści – to tryb bez JS.
+Strony renderowane wyłącznie JavaScriptem (SPA) wymagają opcjonalnego trybu JS.
 
 ## Wsparcie autora
 

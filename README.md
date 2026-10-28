@@ -2,7 +2,7 @@
 
 **English** | [Polski](README.pl.md)
 
-A lightweight, JavaScript-free browser for AI agents (MCP server). Instead of screenshots or raw HTML
+A lightweight browser for AI agents (MCP server). Instead of screenshots or raw HTML
 it returns compact text, so the agent uses far fewer tokens.
 
 Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
@@ -40,7 +40,7 @@ Tokens estimated as characters/4. Test script: [tests/bench/sprawdz.ps1](tests/b
 
 ## Limitations
 
-- No JavaScript: pages rendered only by JS (SPAs) return little content.
+- JavaScript only in the optional JS mode (Chromium); without it, pages rendered only by JS (SPAs) return little content.
 - On some pages `read` starts with noise (e.g. Wikipedia's language list) – use `extract` there.
 - No tabs, scrolling or screenshots.
 

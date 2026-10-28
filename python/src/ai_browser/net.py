@@ -25,6 +25,7 @@ ODSTEP_NA_HOST = 1.0  # sekundy
 class Strona:
     url: str
     html: str
+    js: bool = False  # True = wyrenderowana w Chromium
 
 
 def prywatny(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
@@ -53,9 +54,9 @@ class Siec:
     def pobierz(self, url: str, post: list[tuple[str, str]] | None = None) -> Strona:
         """Pobiera stronę (GET albo POST z polami formularza), idąc za przekierowaniami."""
         for _ in range(MAX_PRZEKIEROWAN + 1):
-            self._sprawdz_adres(url)
+            self.sprawdz_adres(url)
             self._sprawdz_robots(url)
-            self._czekaj(url)
+            self.czekaj(url)
             try:
                 if post is not None:
                     # urlencode zachowuje kolejność i powtórzone nazwy pól
@@ -84,7 +85,7 @@ class Siec:
         raise RuntimeError("za dużo przekierowań")
 
     # ponytail: DNS sprawdzany przed żądaniem, httpx rozwiązuje ponownie (DNS rebinding); własny transport gdy to istotne
-    def _sprawdz_adres(self, url: str) -> None:
+    def sprawdz_adres(self, url: str) -> None:
         """Blokada SSRF: tylko http(s) i bez adresów prywatnych (także po DNS)."""
         czesci = urlsplit(url)
         if czesci.scheme not in ("http", "https"):
@@ -115,7 +116,7 @@ class Siec:
         if not self.robots[zrodlo].can_fetch(NAZWA_UA, url):
             raise RuntimeError(f"robots.txt tej strony zabrania pobrania {url}; poszukaj oficjalnego API")
 
-    def _czekaj(self, url: str) -> None:
+    def czekaj(self, url: str) -> None:
         """Limit tempa: najwyżej jedno żądanie na sekundę na host."""
         host = urlsplit(url).hostname or ""
         minelo = time.monotonic() - self.ostatnie.get(host, 0.0)

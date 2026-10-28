@@ -2,7 +2,7 @@
 
 **English** | [Polski](https://github.com/sebek53/ai-browser/blob/main/python/README.pl.md)
 
-A lightweight, JavaScript-free browser for AI agents (MCP server). Instead of screenshots or raw HTML
+A lightweight browser for AI agents (MCP server). Instead of screenshots or raw HTML
 it returns compact text: about 7x fewer tokens when reading and about 180x fewer when extracting data
 with a CSS selector.
 
@@ -60,6 +60,30 @@ Just ask the agent in plain language, e.g.:
 The agent picks the tools itself: `navigate` opens a page, `read` reads the text, `extract` pulls data
 with a selector, `type`/`click` fill in forms.
 
+### Optional JavaScript mode (pages that need JS)
+
+By default ai-browser does not run JavaScript, so pages built entirely in JS (single-page apps) look empty.
+The optional JS mode fixes that: when a page turns out empty, ai-browser opens it in a headless Chromium,
+waits for it to render and returns the same compact text. Normal pages keep using the light mode.
+
+1. Install Chromium once (about 150 MB):
+
+```
+uvx --from "ai-browser[js]" playwright install chromium
+```
+
+2. Use `uvx --from "ai-browser[js]" ai-browser` instead of `uvx ai-browser`:
+
+```
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js]" ai-browser
+```
+
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js]", "ai-browser"]`.
+
+The agent can also force it with `navigate(url, js=true)`. Disable with `AI_BROWSER_JS=0`.
+Chromium uses the same honest User-Agent, `robots.txt`, rate limit and SSRF protection (every request it makes
+is checked). Memory use grows to 150–300 MB only while Chromium is running.
+
 ### Will Claude use it automatically?
 
 Usually yes: the server tells the agent (MCP server instructions) to prefer it for reading and scraping pages.
@@ -93,7 +117,7 @@ Every response is marked as untrusted page content.
 
 - **`uvx` is not recognized** – after installing uv, restart the terminal / Claude Desktop.
 - **"robots.txt tej strony zabrania…"** (robots.txt disallows this page) – the site does not allow bots; look for its official API.
-- **Empty content** – the page works only with JavaScript, which this browser does not run.
+- **Empty content** – the page works only with JavaScript: enable the optional JS mode (see above).
 
 ## Support the author
 

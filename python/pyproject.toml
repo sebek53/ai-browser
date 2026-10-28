@@ -11,6 +11,10 @@ dependencies = [
     "truststore>=0.9",
 ]
 
+[project.optional-dependencies]
+# Tryb awaryjny dla stron wymagających JavaScriptu (Chromium)
+js = ["playwright>=1.45"]
+
 [project.scripts]
 ai-browser = "ai_browser.server:main"
 
