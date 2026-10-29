@@ -1,51 +1,51 @@
 # ai-browser
 
-**English** | [Polski](README.pl.md)
+**Polski** | [English](README.en.md)
 
-A lightweight browser for AI agents (MCP server). Instead of screenshots or raw HTML
-it returns compact text, so the agent uses far fewer tokens.
+Lekka przeglądarka dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
+zwraca zwięzły tekst, więc agent zużywa dużo mniej tokenów.
 
-Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
 
-## Installation
+## Instalacja
 
-User guide (install with `uvx`, connect to Claude Code / Claude Desktop, usage, troubleshooting):
-**[python/README.md](python/README.md)**.
+Instrukcja dla użytkowników (instalacja przez `uvx`, podpięcie do Claude Code i Claude Desktop, użycie,
+rozwiązywanie problemów): **[python/README.md](python/README.md)**.
 
-## Results (24 test pages)
+## Wyniki (24 strony testowe)
 
-| | raw HTML | screenshots (est.) | `read` | `extract` |
+| | surowy HTML | zrzuty ekranu (szac.) | `read` | `extract` |
 |---|---|---|---|---|
-| total tokens | 2 121 553 | 666 120 | 297 072 | 11 609 |
+| tokeny łącznie | 2 121 553 | 666 120 | 297 072 | 11 609 |
 
-- `read`: about 7x fewer tokens than raw HTML and about 2x fewer than screenshots
-  (in practice even less – the default limit is 8000 characters, the rest is fetched with `offset`).
-- `extract` (CSS selector): about 180x fewer tokens than raw HTML and about 57x fewer than screenshots.
-- Memory: about 20 MB.
+- `read`: ok. 7 razy mniej tokenów niż surowy HTML, ok. 2 razy mniej niż zrzuty ekranu
+  (w praktyce jeszcze mniej – domyślny limit to 8000 znaków, resztę pobiera się przez `offset`).
+- `extract` (selektor CSS): ok. 180 razy mniej niż surowy HTML i ok. 57 razy mniej niż zrzuty ekranu.
+- Pamięć: ok. 20 MB.
 
-Tokens estimated as characters/4. Test script: [tests/bench/sprawdz.ps1](tests/bench/sprawdz.ps1)
-(tokens + correctness: click, forms, back, robots.txt, SSRF, 404, redirects, JSON). Code is in [python/](python/).
+Tokeny szacowane jako znaki/4. Skrypt testowy: [tests/bench/sprawdz.ps1](tests/bench/sprawdz.ps1)
+(tokeny + poprawność: klik, formularze, back, robots.txt, SSRF, 404, przekierowania, JSON). Kod jest w [python/](python/).
 
-## Settings (environment variables)
+## Ustawienia (zmienne środowiskowe)
 
-- `AI_BROWSER_CONTACT` – optional contact appended to the User-Agent (e.g. `mailto:me@example.com`).
-- `AI_BROWSER_ALLOW_PRIVATE=1` – allows private addresses (localhost, 192.168…); blocked by default.
+- `AI_BROWSER_CONTACT` – kontakt dopisywany do User-Agent (domyślnie adres tego repozytorium).
+- `AI_BROWSER_ALLOW_PRIVATE=1` – zezwala na adresy prywatne (localhost, 192.168…); domyślnie blokowane.
 
-## Rules and security
+## Zasady i bezpieczeństwo
 
-- Honest User-Agent `ai-browser/<version>`, respects `robots.txt`, at most 1 request per second per host,
-  `429` responses passed to the agent. No CAPTCHA or anti-bot circumvention.
-- SSRF protection: private addresses checked after DNS resolution and on every redirect.
-- Every response is marked as untrusted page content (prompt injection protection).
+- Uczciwy User-Agent `ai-browser/<wersja>`, respektowanie `robots.txt`, najwyżej 1 żądanie na sekundę na host,
+  odpowiedź `429` przekazywana agentowi. Bez omijania CAPTCHA i zabezpieczeń antybotowych.
+- Blokada SSRF: adresy prywatne sprawdzane po DNS i przy każdym przekierowaniu.
+- Każda odpowiedź oznaczona jako niezaufane dane ze strony (ochrona przed prompt injection).
 
-## Limitations
+## Ograniczenia
 
-- JavaScript only in the optional JS mode (Chromium); without it, pages rendered only by JS (SPAs) return little content.
-- On some pages `read` starts with noise (e.g. Wikipedia's language list) – use `extract` there.
-- No tabs, scrolling or screenshots.
+- JavaScript tylko w opcjonalnym trybie JS (Chromium); bez niego strony renderowane wyłącznie w JS (SPA) zwracają niewiele treści.
+- Na niektórych stronach `read` zaczyna się od szumu (np. lista języków na Wikipedii) – wtedy lepiej użyć `extract`.
+- Brak kart, przewijania i zrzutów ekranu.
 
-## Support the author
+## Wsparcie autora
 
-The project is free. If it saves you tokens, you can buy the author a beer 🍺
+Projekt jest darmowy. Jeśli oszczędza Ci tokeny, możesz postawić autorowi piwo 🍺
 
-[ko-fi.com/sebastiangarstka](https://ko-fi.com/sebastiangarstka) · [buycoffee.to/sebastian.garstka](https://buycoffee.to/sebastian.garstka) (Poland, BLIK)
+[buycoffee.to/sebastian.garstka](https://buycoffee.to/sebastian.garstka) (BLIK, przelew) · [ko-fi.com/sebastiangarstka](https://ko-fi.com/sebastiangarstka)

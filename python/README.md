@@ -1,16 +1,31 @@
 # ai-browser
 
-**English** | [Polski](https://github.com/sebek53/ai-browser/blob/main/python/README.pl.md)
+**Polski** | [English](README.en.md)
 
-A lightweight browser for AI agents (MCP server). Instead of screenshots or raw HTML
-it returns compact text: about 7x fewer tokens when reading and about 180x fewer when extracting data
-with a CSS selector.
+Lekka przeglądarka dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML zwraca zwięzły tekst,
+więc agent zużywa dużo mniej tokenów.
 
-Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+## Korzyści
 
-## Installation
+- **Taniej:** około 7 razy mniej tokenów przy czytaniu stron i około 180 razy mniej przy wyciąganiu konkretnych
+  danych (ceny, tytuły, tabele) niż przy surowym HTML. Mniej tokenów = niższy rachunek i dłuższe rozmowy
+  bez przekraczania limitu.
+- **Szybciej:** strona otwiera się w ułamku sekundy, bez uruchamiania pełnej przeglądarki.
+- **Lżej:** ok. 20 MB pamięci (pełna przeglądarka zajmuje setki MB).
+- **Dokładniej:** agent dostaje czysty tekst bez menu, reklam i stopek, więc rzadziej się myli.
+- **Scraping jednym poleceniem:** „wypisz wszystkie ceny z tej strony” – agent sam dobiera selektor.
+- **Formularze:** wyszukiwarki, filtry, listy wyboru – bez JavaScriptu.
+- **Bezpiecznie:** blokada adresów sieci wewnętrznej, oznaczanie treści stron jako niezaufanej (ochrona przed
+  prompt injection), respektowanie `robots.txt`.
 
-Requires [uv](https://docs.astral.sh/uv/). Windows:
+Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+
+## Instalacja
+
+> **Wklej komendy sam w terminalu** (PowerShell / cmd / Terminal). Nie proś Claude'a, żeby to zainstalował:
+> Claude z zasady nie uruchamia kodu z zewnętrznych repozytoriów i odmówi. To zabezpieczenie, nie błąd.
+
+1. Zainstaluj [uv](https://docs.astral.sh/uv/) (jednorazowo). Windows:
 
 ```
 winget install astral-sh.uv
@@ -22,105 +37,115 @@ macOS / Linux:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Claude Code
+2. Zamknij i otwórz ponownie terminal, potem podepnij przeglądarkę do Claude Code:
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser#subdirectory=python ai-browser
+claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python ai-browser
 ```
 
-Check: `claude mcp get ai-browser` should show `Connected`.
+3. Sprawdzenie: `claude mcp get ai-browser` powinno pokazać `Connected`.
 
-### Claude Desktop and other MCP clients
+### Claude Desktop i inni klienci MCP
 
-1. In Claude Desktop open **Settings → Developer → Edit Config**. This opens `claude_desktop_config.json`
+1. W Claude Desktop otwórz **Ustawienia → Developer → Edit Config**. Otworzy się plik `claude_desktop_config.json`
    (Windows: `%APPDATA%\Claude\`, macOS: `~/Library/Application Support/Claude/`).
-2. Paste the following (if the file already has `mcpServers`, add only the `ai-browser` entry):
+2. Wklej (jeśli plik ma już `mcpServers`, dopisz tylko wpis `ai-browser`):
 
 ```json
 {
   "mcpServers": {
-    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser#subdirectory=python", "ai-browser"] }
+    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python", "ai-browser"] }
   }
 }
 ```
 
-3. Quit Claude Desktop completely (including the system tray) and start it again.
-4. In a new chat the `ai-browser` server should appear in the tools menu.
+3. Zamknij Claude Desktop całkowicie (także z zasobnika systemowego) i uruchom ponownie.
+4. W nowej rozmowie, w menu narzędzi, powinien być widoczny serwer `ai-browser`.
 
-The first start takes a few seconds (uv downloads the package); later starts are instant.
+Pierwsze uruchomienie trwa kilka sekund (uv pobiera paczkę), kolejne są natychmiastowe.
 
-## Usage
+## Czy to bezpieczne? Co robi ten kod
 
-Just ask the agent in plain language, e.g.:
+- Komenda instaluje **konkretną, przypiętą wersję** (`@v0.1.1`). Kod nie zmieni się sam – aktualizujesz go
+  świadomie, podmieniając numer wersji.
+- Kod jest krótki i otwarty: 5 plików w [`python/src/ai_browser`](src/ai_browser) (ok. 600 linii). Można go
+  przejrzeć przed instalacją.
+- Program **łączy się tylko ze stronami, które agent otwiera na Twoją prośbę**. Nie ma telemetrii, nie wysyła
+  danych nigdzie indziej, nie czyta plików na dysku.
+- Blokuje adresy sieci wewnętrznej (localhost, 192.168…, 10…, adresy metadanych chmury), więc strona nie może
+  go użyć do zajrzenia do Twojej sieci firmowej.
+- Nie omija CAPTCHA ani zabezpieczeń stron, przedstawia się uczciwie i respektuje `robots.txt`.
+- Na komputerze służbowym sprawdź zasady firmy dotyczące instalowania narzędzi – w razie wątpliwości zapytaj dział IT.
 
-- "Open https://books.toscrape.com and list the book titles and prices."
-- "Read this article and summarize it in 5 bullet points: <url>."
-- "Search <site> for X and give me the first 3 results."
+## Jak używać
 
-The agent picks the tools itself: `navigate` opens a page, `read` reads the text, `extract` pulls data
-with a selector, `type`/`click` fill in forms.
+Wystarczy poprosić agenta zwykłym językiem, np.:
 
-### Optional JavaScript mode (pages that need JS)
+- „Otwórz https://books.toscrape.com i wypisz tytuły i ceny książek.”
+- „Przeczytaj ten artykuł i streść go w 5 punktach: <adres>.”
+- „Wyszukaj na <stronie> frazę X i podaj pierwsze 3 wyniki.”
 
-By default ai-browser does not run JavaScript, so pages built entirely in JS (single-page apps) look empty.
-The optional JS mode fixes that: when a page turns out empty, ai-browser opens it in a headless Chromium,
-waits for it to render and returns the same compact text. Normal pages keep using the light mode.
+Agent sam wybiera narzędzia: `navigate` otwiera stronę, `read` czyta tekst, `extract` wyciąga dane selektorem,
+`type`/`click` wypełniają formularze.
 
-1. Install Chromium once (about 150 MB):
+### Czy Claude użyje jej automatycznie?
+
+Zwykle tak: serwer przekazuje agentowi instrukcję, żeby wybierał go do czytania i scrapowania stron. Agent
+decyduje jednak sam i czasem może sięgnąć po wbudowane pobieranie stron. Żeby zawsze używał ai-browser:
+
+- napisz w prośbie: „użyj ai-browser, żeby …”, albo
+- dodaj jedną linię do `CLAUDE.md` (Claude Code) lub instrukcji projektu (Claude Desktop):
+  `Do czytania stron internetowych zawsze używaj narzędzi ai-browser.`
+
+Przy pierwszym użyciu Claude pyta o zgodę na uruchomienie narzędzi. Żeby nie pytał w Claude Code, wybierz
+„zawsze zezwalaj” albo dopisz `mcp__ai-browser` do listy `allow` w `~/.claude/settings.json`.
+
+### Opcjonalny tryb JavaScript (strony wymagające JS)
+
+Domyślnie ai-browser nie uruchamia JavaScriptu, więc strony zbudowane w całości w JS (aplikacje SPA) wyglądają
+na puste. Opcjonalny tryb JS to naprawia: gdy strona okaże się pusta, ai-browser otwiera ją w Chromium bez
+okna, czeka na wyrenderowanie i zwraca ten sam zwięzły tekst. Zwykłe strony nadal idą lekkim trybem.
+
+1. Jednorazowo zainstaluj Chromium (ok. 150 MB):
 
 ```
-uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" playwright install chromium
+uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python" playwright install chromium
 ```
 
-2. Use `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" ai-browser` instead of the basic command:
+2. Podepnij wersję z trybem JS (zamiast podstawowej):
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" ai-browser
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python" ai-browser
 ```
 
-Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python", "ai-browser"]`.
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python", "ai-browser"]`.
 
-The agent can also force it with `navigate(url, js=true)`. Disable with `AI_BROWSER_JS=0`.
-Chromium uses the same honest User-Agent, `robots.txt`, rate limit and SSRF protection (every request it makes
-is checked). Memory use grows to 150–300 MB only while Chromium is running.
+Agent może też wymusić tryb JS przez `navigate(url, js=true)`. Wyłączenie: `AI_BROWSER_JS=0`.
+Chromium używa tego samego uczciwego User-Agenta, `robots.txt`, limitu tempa i blokady SSRF (sprawdzane jest
+każde jego żądanie). Zużycie pamięci rośnie do 150–300 MB tylko wtedy, gdy Chromium działa.
 
-### Will Claude use it automatically?
+## Aktualizacja i odinstalowanie
 
-Usually yes: the server tells the agent (MCP server instructions) to prefer it for reading and scraping pages.
-The agent still decides on its own and may sometimes pick its built-in web fetch or browser instead. To make
-it always use ai-browser:
+- Aktualizacja: w komendzie instalacji podmień `@v0.1.1` na nowszą wersję z
+  [listy wydań](https://github.com/sebek53/ai-browser/releases), potem `claude mcp remove ai-browser -s user`
+  i ponownie `claude mcp add …`.
+- Odinstalowanie: `claude mcp remove ai-browser -s user` lub usunięcie wpisu z `claude_desktop_config.json`.
 
-- say it in the request: "use ai-browser to …", or
-- add one line to your `CLAUDE.md` (Claude Code) or project instructions (Claude Desktop):
-  `For reading web pages always use the ai-browser tools.`
+## Problemy
 
-On first use Claude asks for permission to run the tools. To stop the prompts in Claude Code, choose
-"always allow" or add `mcp__ai-browser` to the `allow` list in `~/.claude/settings.json`.
+- **`uvx` nie jest rozpoznawane** – po instalacji uv uruchom ponownie terminal / Claude Desktop.
+- **Claude odmawia instalacji** – wklej komendę sam w terminalu (patrz „Instalacja”).
+- **„robots.txt tej strony zabrania…”** – strona nie zgadza się na automaty; poszukaj jej oficjalnego API.
+- **Pusta treść** – strona działa tylko z JavaScriptem: włącz opcjonalny tryb JS (opis wyżej).
 
-## Update and uninstall
+## Ustawienia (zmienne środowiskowe)
 
-- Update: `uv cache clean ai-browser`, then restart Claude (the newest version from GitHub is downloaded).
-- Uninstall: `claude mcp remove ai-browser -s user` or remove the entry from `claude_desktop_config.json`.
+- `AI_BROWSER_CONTACT` – kontakt dopisywany do User-Agent (domyślnie adres tego repozytorium).
+- `AI_BROWSER_ALLOW_PRIVATE=1` – zezwala na adresy prywatne (localhost, 192.168…); domyślnie blokowane.
+- `AI_BROWSER_JS=0` – wyłącza tryb JS.
 
-## Settings (environment variables)
+## Wsparcie autora
 
-- `AI_BROWSER_CONTACT` – contact appended to the User-Agent (e.g. `mailto:me@example.com`).
-- `AI_BROWSER_ALLOW_PRIVATE=1` – allows private addresses (localhost, 192.168…); blocked by default.
+Projekt jest darmowy. Jeśli oszczędza Ci tokeny, możesz postawić autorowi piwo 🍺
 
-## Rules
-
-The program identifies itself honestly (User-Agent `ai-browser/<version>`), respects `robots.txt`, sends at most
-one request per second to a single host and does not bypass CAPTCHAs or anti-bot protection.
-Every response is marked as untrusted page content.
-
-## Troubleshooting
-
-- **`uvx` is not recognized** – after installing uv, restart the terminal / Claude Desktop.
-- **"robots.txt tej strony zabrania…"** (robots.txt disallows this page) – the site does not allow bots; look for its official API.
-- **Empty content** – the page works only with JavaScript: enable the optional JS mode (see above).
-
-## Support the author
-
-The project is free. If it saves you tokens, you can buy the author a beer 🍺
-
-[ko-fi.com/sebastiangarstka](https://ko-fi.com/sebastiangarstka) · [buycoffee.to/sebastian.garstka](https://buycoffee.to/sebastian.garstka) (Poland, BLIK)
+[buycoffee.to/sebastian.garstka](https://buycoffee.to/sebastian.garstka) (BLIK, przelew) · [ko-fi.com/sebastiangarstka](https://ko-fi.com/sebastiangarstka)

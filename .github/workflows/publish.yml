@@ -1,9 +1,8 @@
-# Publikacja na PyPI przy każdym nowym release na GitHubie (Trusted Publishing – bez tokenów)
+# Publikacja na PyPI uruchamiana ręcznie (Trusted Publishing – bez tokenów)
 name: publish
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:  # tylko ręcznie – PyPI wymaga konta z 2FA i zaufanego wydawcy
 
 jobs:
   pypi:
