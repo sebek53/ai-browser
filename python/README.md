@@ -82,6 +82,14 @@ Sprawdzenie: `codex mcp list` powinno pokazać `ai-browser` ze statusem `enabled
 są oznaczone jako tylko do odczytu, więc Codex może je uruchamiać bez pytania o zgodę; `click` i `type`
 (wysyłanie formularzy) wymagają zgody.
 
+Codex domyślnie sięga po swoją wbudowaną przeglądarkę. Żeby sam wybierał ai-browser, dopisz do
+`~/.codex/AGENTS.md`:
+
+```
+Do czytania stron internetowych i wyciągania z nich danych używaj narzędzi MCP serwera ai-browser
+(navigate, read, extract, tables, snapshot), a nie wbudowanej przeglądarki.
+```
+
 Jeśli Codex mówi, że nie widzi narzędzi ai-browser (niektóre wersje ukrywają narzędzia zewnętrznych serwerów MCP),
 dopisz do `config.toml`:
 

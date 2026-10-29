@@ -80,6 +80,14 @@ args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory
 Check: `codex mcp list` should show `ai-browser` as `enabled`. Page-reading tools are marked read-only, so Codex
 can run them without asking for approval; `click` and `type` (form submission) require approval.
 
+By default Codex reaches for its built-in browser. To make it pick ai-browser on its own, add to
+`~/.codex/AGENTS.md`:
+
+```
+For reading web pages and extracting data from them use the ai-browser MCP tools
+(navigate, read, extract, tables, snapshot), not the built-in browser.
+```
+
 If Codex says it cannot see the ai-browser tools (some versions hide tools of external MCP servers), add to
 `config.toml`:
 
