@@ -38,7 +38,7 @@ def prywatny(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
 class Siec:
     def __init__(self) -> None:
         # Uczciwy User-Agent; adres kontaktowy z AI_BROWSER_CONTACT
-        kontakt = os.environ.get("AI_BROWSER_CONTACT", "brak kontaktu")
+        kontakt = os.environ.get("AI_BROWSER_CONTACT", "https://github.com/sebek53/ai-browser")
         self.ua = f"{NAZWA_UA}/{__version__} (+{kontakt})"
         self.klient = httpx.Client(
             headers={"User-Agent": self.ua},
