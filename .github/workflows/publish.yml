@@ -1,0 +1,25 @@
+# Publikacja na PyPI przy każdym nowym release na GitHubie (Trusted Publishing – bez tokenów)
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # wymagane przez Trusted Publishing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Testy przed publikacją
+        working-directory: python
+        run: uv run pytest -q
+      - name: Budowanie paczki
+        working-directory: python
+        run: uv build
+      - name: Publikacja na PyPI
+        working-directory: python
+        run: uv publish --trusted-publishing always
