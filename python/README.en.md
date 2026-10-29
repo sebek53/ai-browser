@@ -7,8 +7,10 @@ so the agent uses far fewer tokens.
 
 ## Benefits
 
-- **Cheaper:** about 7x fewer tokens when reading pages and about 180x fewer when extracting specific data
-  (prices, titles, tables) compared with raw HTML. Fewer tokens = lower bills and longer conversations within limits.
+- **Cheaper data extraction:** `extract` (prices, titles, tables) uses from a few to over 1000x fewer tokens than
+  reading the whole page (Wikipedia: 121 characters instead of 180k). This is the main saving.
+- **Reading a whole page** (`read`) returns about as much text as a regular browser – but about 7x less than raw
+  HTML and no screenshots. The default 8000-character limit keeps huge pages from being pulled in at once.
 - **Faster:** pages open in a fraction of a second, without starting a full browser.
 - **Lighter:** about 20 MB of memory (a full browser takes hundreds of MB).
 - **More accurate:** the agent gets clean text without menus, ads and footers, so it makes fewer mistakes.

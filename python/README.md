@@ -7,9 +7,10 @@ więc agent zużywa dużo mniej tokenów.
 
 ## Korzyści
 
-- **Taniej:** około 7 razy mniej tokenów przy czytaniu stron i około 180 razy mniej przy wyciąganiu konkretnych
-  danych (ceny, tytuły, tabele) niż przy surowym HTML. Mniej tokenów = niższy rachunek i dłuższe rozmowy
-  bez przekraczania limitu.
+- **Taniej przy wyciąganiu danych:** `extract` (ceny, tytuły, tabele) zużywa od kilku do ponad 1000 razy mniej
+  tokenów niż czytanie całej strony (Wikipedia: 121 znaków zamiast 180 tys.). To główna oszczędność.
+- **Czytanie całej strony** (`read`) zwraca mniej więcej tyle tekstu, co zwykła przeglądarka – ale ok. 7 razy mniej
+  niż surowy HTML i bez zrzutów ekranu. Domyślny limit 8000 znaków chroni przed wciągnięciem ogromnej strony naraz.
 - **Szybciej:** strona otwiera się w ułamku sekundy, bez uruchamiania pełnej przeglądarki.
 - **Lżej:** ok. 20 MB pamięci (pełna przeglądarka zajmuje setki MB).
 - **Dokładniej:** agent dostaje czysty tekst bez menu, reklam i stopek, więc rzadziej się myli.

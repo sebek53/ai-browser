@@ -21,6 +21,9 @@ rozwiązywanie problemów): **[python/README.md](python/README.md)**.
 - `read`: ok. 7 razy mniej tokenów niż surowy HTML, ok. 2 razy mniej niż zrzuty ekranu
   (w praktyce jeszcze mniej – domyślny limit to 8000 znaków, resztę pobiera się przez `offset`).
 - `extract` (selektor CSS): ok. 180 razy mniej niż surowy HTML i ok. 57 razy mniej niż zrzuty ekranu.
+- Uczciwie: względem samego tekstu strony z przeglądarki (innerText) `read` daje podobną ilość tekstu
+  (Wikipedia „Poland”: 185 tys. vs 181 tys. znaków). Realna oszczędność to `extract` – tu 121 znaków
+  zamiast 181 tys. – oraz brak zrzutów ekranu.
 - Pamięć: ok. 20 MB.
 
 Tokeny szacowane jako znaki/4. Skrypt testowy: [tests/bench/sprawdz.ps1](tests/bench/sprawdz.ps1)
