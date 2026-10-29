@@ -25,7 +25,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ### Claude Code
 
 ```
-claude mcp add --scope user ai-browser -- uvx ai-browser
+claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser#subdirectory=python ai-browser
 ```
 
 Check: `claude mcp get ai-browser` should show `Connected`.
@@ -39,7 +39,7 @@ Check: `claude mcp get ai-browser` should show `Connected`.
 ```json
 {
   "mcpServers": {
-    "ai-browser": { "command": "uvx", "args": ["ai-browser"] }
+    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser#subdirectory=python", "ai-browser"] }
   }
 }
 ```
@@ -69,16 +69,16 @@ waits for it to render and returns the same compact text. Normal pages keep usin
 1. Install Chromium once (about 150 MB):
 
 ```
-uvx --from "ai-browser[js]" playwright install chromium
+uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" playwright install chromium
 ```
 
-2. Use `uvx --from "ai-browser[js]" ai-browser` instead of `uvx ai-browser`:
+2. Use `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" ai-browser` instead of the basic command:
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js]" ai-browser
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python" ai-browser
 ```
 
-Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js]", "ai-browser"]`.
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser#subdirectory=python", "ai-browser"]`.
 
 The agent can also force it with `navigate(url, js=true)`. Disable with `AI_BROWSER_JS=0`.
 Chromium uses the same honest User-Agent, `robots.txt`, rate limit and SSRF protection (every request it makes
@@ -99,7 +99,7 @@ On first use Claude asks for permission to run the tools. To stop the prompts in
 
 ## Update and uninstall
 
-- Update: `uvx ai-browser@latest` (or `uv cache clean ai-browser`).
+- Update: `uv cache clean ai-browser`, then restart Claude (the newest version from GitHub is downloaded).
 - Uninstall: `claude mcp remove ai-browser -s user` or remove the entry from `claude_desktop_config.json`.
 
 ## Settings (environment variables)
