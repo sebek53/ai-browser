@@ -39,7 +39,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 2. Close and reopen the terminal, then connect the browser to Claude Code:
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python ai-browser
+claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python ai-browser
 ```
 
 3. Check: `claude mcp get ai-browser` should show `Connected`.
@@ -53,7 +53,7 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 ```json
 {
   "mcpServers": {
-    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python", "ai-browser"] }
+    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"] }
   }
 }
 ```
@@ -61,11 +61,38 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 3. Quit Claude Desktop completely (including the system tray) and start it again.
 4. In a new chat the `ai-browser` server should appear in the tools menu.
 
+### Codex (OpenAI)
+
+In a terminal:
+
+```
+codex mcp add ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python ai-browser
+```
+
+or add to `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.toml`):
+
+```toml
+[mcp_servers.ai-browser]
+command = "uvx"
+args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"]
+```
+
+Check: `codex mcp list` should show `ai-browser` as `enabled`. Page-reading tools are marked read-only, so Codex
+can run them without asking for approval; `click` and `type` (form submission) require approval.
+
+If Codex says it cannot see the ai-browser tools (some versions hide tools of external MCP servers), add to
+`config.toml`:
+
+```toml
+[features]
+tool_search_always_defer_mcp_tools = false
+```
+
 The first start takes a few seconds (uv downloads the package); later starts are instant.
 
 ## Is it safe? What this code does
 
-- The command installs a **specific, pinned version** (`@v0.1.1`). The code never changes by itself – you update
+- The command installs a **specific, pinned version** (`@v0.1.2`). The code never changes by itself – you update
   deliberately by changing the version number.
 - The code is short and open: 5 files in [`python/src/ai_browser`](src/ai_browser) (about 600 lines). You can
   review it before installing.
@@ -108,16 +135,16 @@ waits for it to render and returns the same compact text. Normal pages keep usin
 1. Install Chromium once (about 150 MB):
 
 ```
-uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python" playwright install chromium
+uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python" playwright install chromium
 ```
 
 2. Connect the JS-enabled version (instead of the basic one):
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python" ai-browser
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python" ai-browser
 ```
 
-Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.1#subdirectory=python", "ai-browser"]`.
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"]`.
 
 The agent can also force it with `navigate(url, js=true)`. Disable with `AI_BROWSER_JS=0`.
 Chromium uses the same honest User-Agent, `robots.txt`, rate limit and SSRF protection (every request it makes
@@ -125,7 +152,7 @@ is checked). Memory use grows to 150–300 MB only while Chromium is running.
 
 ## Update and uninstall
 
-- Update: in the install command replace `@v0.1.1` with a newer version from the
+- Update: in the install command replace `@v0.1.2` with a newer version from the
   [releases list](https://github.com/sebek53/ai-browser/releases), then `claude mcp remove ai-browser -s user`
   and run `claude mcp add …` again.
 - Uninstall: `claude mcp remove ai-browser -s user` or remove the entry from `claude_desktop_config.json`.

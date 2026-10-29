@@ -9,7 +9,7 @@ Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`
 
 ## Instalacja
 
-Instrukcja dla użytkowników (instalacja przez `uvx`, podpięcie do Claude Code i Claude Desktop, użycie,
+Instrukcja dla użytkowników (instalacja przez `uvx`, podpięcie do Claude Code, Claude Desktop i Codex, użycie,
 rozwiązywanie problemów): **[python/README.md](python/README.md)**.
 
 ## Wyniki (24 strony testowe)

@@ -15,9 +15,16 @@ from .render import JAK_WLACZYC, Renderer
 PODEJRZANE = ("ignore previous instructions", "ignore all previous", "zignoruj poprzednie", "system prompt")
 
 
+# Narzędzia, które mogą coś wysłać na stronę (formularze) – reszta tylko czyta
+ZMIENIAJACE = {"click", "type"}
+
+
 def _narzedzie(nazwa: str, opis: str, wlasciwosci: dict, wymagane: list[str] | None = None) -> dict:
+    # Adnotacje MCP: klienci (np. Codex) mogą uruchamiać narzędzia tylko-do-odczytu bez pytania o zgodę
     return {"name": nazwa, "description": opis,
-            "inputSchema": {"type": "object", "properties": wlasciwosci, "required": wymagane or []}}
+            "inputSchema": {"type": "object", "properties": wlasciwosci, "required": wymagane or []},
+            "annotations": {"readOnlyHint": nazwa not in ZMIENIAJACE, "destructiveHint": False,
+                            "openWorldHint": True}}
 
 
 def _liczba(opis: str) -> dict:
