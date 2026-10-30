@@ -41,7 +41,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 2. Zamknij i otwórz ponownie terminal, potem podepnij przeglądarkę do Claude Code:
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python ai-browser
+claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python ai-browser
 ```
 
 3. Sprawdzenie: `claude mcp get ai-browser` powinno pokazać `Connected`.
@@ -55,7 +55,7 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 ```json
 {
   "mcpServers": {
-    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"] }
+    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"] }
   }
 }
 ```
@@ -68,7 +68,7 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 W terminalu:
 
 ```
-codex mcp add ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python ai-browser
+codex mcp add ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python ai-browser
 ```
 
 albo dopisz do `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.toml`):
@@ -76,7 +76,7 @@ albo dopisz do `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.tom
 ```toml
 [mcp_servers.ai-browser]
 command = "uvx"
-args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"]
+args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"]
 ```
 
 Sprawdzenie: `codex mcp list` powinno pokazać `ai-browser` ze statusem `enabled`. Narzędzia do czytania stron
@@ -103,7 +103,7 @@ Pierwsze uruchomienie trwa kilka sekund (uv pobiera paczkę), kolejne są natych
 
 ## Czy to bezpieczne? Co robi ten kod
 
-- Komenda instaluje **konkretną, przypiętą wersję** (`@v0.1.2`). Kod nie zmieni się sam – aktualizujesz go
+- Komenda instaluje **konkretną, przypiętą wersję** (`@v0.1.3`). Kod nie zmieni się sam – aktualizujesz go
   świadomie, podmieniając numer wersji.
 - Kod jest krótki i otwarty: 5 plików w [`python/src/ai_browser`](src/ai_browser) (ok. 600 linii). Można go
   przejrzeć przed instalacją.
@@ -148,16 +148,16 @@ okna, czeka na wyrenderowanie i zwraca ten sam zwięzły tekst. Zwykłe strony n
 1. Jednorazowo zainstaluj Chromium (ok. 150 MB):
 
 ```
-uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python" playwright install chromium
+uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" playwright install chromium
 ```
 
 2. Podepnij wersję z trybem JS (zamiast podstawowej):
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python" ai-browser
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" ai-browser
 ```
 
-Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.2#subdirectory=python", "ai-browser"]`.
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"]`.
 
 Agent może też wymusić tryb JS przez `navigate(url, js=true)`. Wyłączenie: `AI_BROWSER_JS=0`.
 Chromium używa tego samego uczciwego User-Agenta, `robots.txt`, limitu tempa i blokady SSRF (sprawdzane jest
@@ -165,7 +165,7 @@ każde jego żądanie). Zużycie pamięci rośnie do 150–300 MB tylko wtedy, g
 
 ## Aktualizacja i odinstalowanie
 
-- Aktualizacja: w komendzie instalacji podmień `@v0.1.2` na nowszą wersję z
+- Aktualizacja: w komendzie instalacji podmień `@v0.1.3` na nowszą wersję z
   [listy wydań](https://github.com/sebek53/ai-browser/releases), potem `claude mcp remove ai-browser -s user`
   i ponownie `claude mcp add …`.
 - Odinstalowanie: `claude mcp remove ai-browser -s user` lub usunięcie wpisu z `claude_desktop_config.json`.
