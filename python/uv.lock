@@ -8,17 +8,13 @@ resolution-markers = [
 
 [[package]]
 name = "ai-browser"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
+    { name = "playwright" },
     { name = "selectolax" },
     { name = "truststore" },
-]
-
-[package.optional-dependencies]
-js = [
-    { name = "playwright" },
 ]
 
 [package.dev-dependencies]
@@ -29,7 +25,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.27" },
-    { name = "playwright", marker = "extra == 'js'", specifier = ">=1.45" },
+    { name = "playwright", specifier = ">=1.45" },
     { name = "selectolax", specifier = ">=0.3.21" },
     { name = "truststore", specifier = ">=0.9" },
 ]

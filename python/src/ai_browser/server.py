@@ -159,7 +159,9 @@ class Sesja:
             self.blad_js = JAK_WLACZYC
         except Exception as e:  # np. brak pobranego Chromium
             komunikat = str(e).splitlines()[0] if str(e) else type(e).__name__
-            self.blad_js = f"Chromium failed ({komunikat}); {JAK_WLACZYC}"
+            # Brak pobranego Chromium to najczęstszy przypadek – wtedy sama prosta instrukcja
+            brak = "executable doesn't exist" in str(e).lower()
+            self.blad_js = JAK_WLACZYC if brak else f"Chromium failed ({komunikat}); {JAK_WLACZYC}"
         return None
 
     def _idz(self, url: str, post: list[tuple[str, str]] | None = None, wymus_js: bool = False) -> str:

@@ -4,12 +4,19 @@ from __future__ import annotations
 
 from urllib.parse import urlsplit
 
+from . import __version__
 from .net import Siec, Strona
 
-# Jak włączyć tryb JS – pokazywane agentowi, gdy dodatek nie jest zainstalowany
+KOMENDA_CHROMIUM = (f'uvx --from "git+https://github.com/sebek53/ai-browser@v{__version__}#subdirectory=python" '
+                    "playwright install chromium")
+
+# Jak włączyć tryb JS – agent przekazuje to użytkownikowi, gdy brakuje Chromium
 JAK_WLACZYC = (
-    'install the optional JS mode: run the server with `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" ai-browser` '
-    'and once `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" playwright install chromium`'
+    "JS mode needs the Chromium browser, which is not installed yet. Tell the user in their language, in simple "
+    "words: this page works only with JavaScript; to read such pages, open a terminal once (Windows: PowerShell, "
+    f"macOS: Terminal), paste this command and press Enter: `{KOMENDA_CHROMIUM}` – it downloads about 150 MB and "
+    "takes 1-2 minutes. No restart is needed; afterwards ask again. Offer to run the command for the user "
+    "if they prefer"
 )
 
 # Zasoby niepotrzebne do odczytu treści – nie pobieramy ich (szybciej, mniej transferu)
@@ -29,7 +36,12 @@ class Renderer:
         from playwright.sync_api import sync_playwright  # import tutaj: dodatek [js] jest opcjonalny
 
         self._pw = sync_playwright().start()
-        przegladarka = self._pw.chromium.launch(headless=True)
+        try:
+            przegladarka = self._pw.chromium.launch(headless=True)
+        except Exception:
+            # Np. brak pobranego Chromium – sprzątamy, żeby po doinstalowaniu kolejna próba zadziałała bez restartu
+            self.zamknij()
+            raise
         # Ten sam uczciwy User-Agent co w trybie bez JS
         self._kontekst = przegladarka.new_context(user_agent=self.siec.ua)
         self._kontekst.route("**/*", self._filtr)

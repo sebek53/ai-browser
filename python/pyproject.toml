@@ -1,6 +1,6 @@
 [project]
 name = "ai-browser"
-version = "0.1.4"
+version = "0.1.5"
 description = "Lightweight JavaScript-free browser for AI agents - token-efficient MCP server (stdio)"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -9,11 +9,13 @@ dependencies = [
     "httpx>=0.27",
     "selectolax>=0.3.21",
     "truststore>=0.9",
+    # Tryb JS: sama biblioteka w paczce, Chromium (~150 MB) pobiera użytkownik jedną komendą, gdy go potrzebuje
+    "playwright>=1.45",
 ]
 
 [project.optional-dependencies]
-# Tryb awaryjny dla stron wymagających JavaScriptu (Chromium)
-js = ["playwright>=1.45"]
+# Zgodność ze starymi komendami instalacji `ai-browser[js]`
+js = []
 
 [project.scripts]
 ai-browser = "ai_browser.server:main"
