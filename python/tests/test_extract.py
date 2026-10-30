@@ -105,3 +105,25 @@ def test_crawl_linki():
     html = ('<a href="/a#x">1</a><a href="/a">2</a><a href="https://inna.pl/b">3</a>'
             '<a href="/obraz.png">4</a><a href="mailto:x@y.pl">5</a><a href="b?p=2">6</a>')
     assert linki(html, "https://ex.com/dir/", "https://ex.com/") == ["https://ex.com/a", "https://ex.com/dir/b?p=2"]
+
+
+def test_search_ddg_parsowanie():
+    # Reklamy (y.js) pomijane, adres wyciągany z przekierowania, formularz następnej strony odczytany
+    from ai_browser.search import wyniki_ddg
+    html = ('<div class="result"><a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fduckduckgo.com'
+            '%2Fy.js%3Fad%3D1">Ad</a></div>'
+            '<div class="result"><a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Ffirma.co.uk%2F">'
+            'Firma  Ltd</a><a class="result__snippet">Large format</a></div>'
+            '<div class="nav-link"><form><input type="hidden" name="s" value="10"></form></div>')
+    wyniki, dalej = wyniki_ddg(html)
+    assert wyniki == [("Firma Ltd", "https://firma.co.uk/", "Large format")]
+    assert dalej == [("s", "10")]
+
+
+def test_contacts_dane():
+    # mailto/tel + e-mail w tekście; duplikaty telefonu i pliki graficzne odrzucone
+    from ai_browser.contacts import dane
+    html = ('<html><head><title>Firma | Druk</title></head><body><a href="mailto:Biuro@firma.pl?subject=x">m</a>'
+            '<a href="tel:0141 352 6800">t</a><a href="tel:01413526800">t</a>'
+            '<p>pisz: sprzedaz@firma.pl, logo@2x.png</p></body></html>')
+    assert dane(html) == ("Firma | Druk", ["biuro@firma.pl", "sprzedaz@firma.pl"], ["0141 352 6800"])

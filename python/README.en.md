@@ -15,11 +15,13 @@ so the agent uses far fewer tokens.
 - **Lighter:** about 20 MB of memory (a full browser takes hundreds of MB).
 - **More accurate:** the agent gets clean text without menus, ads and footers, so it makes fewer mistakes.
 - **Scraping in one request:** "list all prices on this page" – the agent picks the selector itself.
+- **Search without an API key:** `search` searches the web (DuckDuckGo) with a country, e.g. `region=uk-en`, `pl-pl`.
+- **Bulk contacts:** `contacts` collects emails and phone numbers from many sites at once (including their contact page).
 - **Forms:** search boxes, filters, drop-downs – without JavaScript.
 - **Safe:** blocks internal network addresses, marks page content as untrusted (prompt injection protection),
   respects `robots.txt`.
 
-Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`.
+Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`, `search`, `contacts`.
 
 ## Installation
 
@@ -41,7 +43,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 2. Close and reopen the terminal, then connect the browser to Claude Code:
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python ai-browser
+claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python ai-browser
 ```
 
 3. Check: `claude mcp get ai-browser` should show `Connected`.
@@ -55,7 +57,7 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 ```json
 {
   "mcpServers": {
-    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"] }
+    "ai-browser": { "command": "uvx", "args": ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python", "ai-browser"] }
   }
 }
 ```
@@ -68,7 +70,7 @@ claude mcp add --scope user ai-browser -- uvx --from git+https://github.com/sebe
 In a terminal:
 
 ```
-codex mcp add ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python ai-browser
+codex mcp add ai-browser -- uvx --from git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python ai-browser
 ```
 
 or add to `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.toml`):
@@ -76,7 +78,7 @@ or add to `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.toml`):
 ```toml
 [mcp_servers.ai-browser]
 command = "uvx"
-args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"]
+args = ["--from", "git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python", "ai-browser"]
 ```
 
 Check: `codex mcp list` should show `ai-browser` as `enabled`. Page-reading tools are marked read-only, so Codex
@@ -102,7 +104,7 @@ The first start takes a few seconds (uv downloads the package); later starts are
 
 ## Is it safe? What this code does
 
-- The command installs a **specific, pinned version** (`@v0.1.3`). The code never changes by itself – you update
+- The command installs a **specific, pinned version** (`@v0.1.4`). The code never changes by itself – you update
   deliberately by changing the version number.
 - The code is short and open: 5 files in [`python/src/ai_browser`](src/ai_browser) (about 600 lines). You can
   review it before installing.
@@ -120,6 +122,7 @@ Just ask the agent in plain language, e.g.:
 - "Open https://books.toscrape.com and list the book titles and prices."
 - "Read this article and summarize it in 5 bullet points: <url>."
 - "Search <site> for X and give me the first 3 results."
+- "Find large format printers in Glasgow and Edinburgh and make a table with email and phone." (`search` + `contacts`)
 - "Go through 30 pages of https://books.toscrape.com and list all book titles." (`crawl` – many pages of one
   site, 1 page per second, respecting `robots.txt`; default limit 20, max 200)
 
@@ -147,16 +150,16 @@ waits for it to render and returns the same compact text. Normal pages keep usin
 1. Install Chromium once (about 150 MB):
 
 ```
-uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" playwright install chromium
+uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" playwright install chromium
 ```
 
 2. Connect the JS-enabled version (instead of the basic one):
 
 ```
-claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" ai-browser
+claude mcp add --scope user ai-browser -- uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" ai-browser
 ```
 
-Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python", "ai-browser"]`.
+Claude Desktop: `"command": "uvx", "args": ["--from", "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python", "ai-browser"]`.
 
 The agent can also force it with `navigate(url, js=true)`. Disable with `AI_BROWSER_JS=0`.
 Chromium uses the same honest User-Agent, `robots.txt`, rate limit and SSRF protection (every request it makes
@@ -164,7 +167,7 @@ is checked). Memory use grows to 150–300 MB only while Chromium is running.
 
 ## Update and uninstall
 
-- Update: in the install command replace `@v0.1.3` with a newer version from the
+- Update: in the install command replace `@v0.1.4` with a newer version from the
   [releases list](https://github.com/sebek53/ai-browser/releases), then `claude mcp remove ai-browser -s user`
   and run `claude mcp add …` again.
 - Uninstall: `claude mcp remove ai-browser -s user` or remove the entry from `claude_desktop_config.json`.
@@ -181,6 +184,7 @@ is checked). Memory use grows to 150–300 MB only while Chromium is running.
 - `AI_BROWSER_CONTACT` – contact appended to the User-Agent (default: this repository's URL).
 - `AI_BROWSER_ALLOW_PRIVATE=1` – allows private addresses (localhost, 192.168…); blocked by default.
 - `AI_BROWSER_JS=0` – disables JS mode.
+- `BRAVE_API_KEY` – optional [Brave Search API](https://brave.com/search/api/) key (free tier); `search` uses it instead of DuckDuckGo – more reliable for very many queries.
 
 ## Support the author
 

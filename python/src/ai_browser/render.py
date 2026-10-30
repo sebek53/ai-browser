@@ -8,8 +8,8 @@ from .net import Siec, Strona
 
 # Jak włączyć tryb JS – pokazywane agentowi, gdy dodatek nie jest zainstalowany
 JAK_WLACZYC = (
-    'install the optional JS mode: run the server with `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" ai-browser` '
-    'and once `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.3#subdirectory=python" playwright install chromium`'
+    'install the optional JS mode: run the server with `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" ai-browser` '
+    'and once `uvx --from "ai-browser[js] @ git+https://github.com/sebek53/ai-browser@v0.1.4#subdirectory=python" playwright install chromium`'
 )
 
 # Zasoby niepotrzebne do odczytu treści – nie pobieramy ich (szybciej, mniej transferu)
