@@ -5,7 +5,7 @@
 Lekka przeglądarka dla agentów AI (serwer MCP). Zamiast zrzutów ekranu i surowego HTML
 zwraca zwięzły tekst, więc agent zużywa dużo mniej tokenów.
 
-Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`.
 
 ## Instalacja
 

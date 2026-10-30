@@ -19,7 +19,7 @@ więc agent zużywa dużo mniej tokenów.
 - **Bezpiecznie:** blokada adresów sieci wewnętrznej, oznaczanie treści stron jako niezaufanej (ochrona przed
   prompt injection), respektowanie `robots.txt`.
 
-Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+Narzędzia: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`.
 
 ## Instalacja
 
@@ -121,6 +121,8 @@ Wystarczy poprosić agenta zwykłym językiem, np.:
 - „Otwórz https://books.toscrape.com i wypisz tytuły i ceny książek.”
 - „Przeczytaj ten artykuł i streść go w 5 punktach: <adres>.”
 - „Wyszukaj na <stronie> frazę X i podaj pierwsze 3 wyniki.”
+- „Przejdź po 30 stronach https://books.toscrape.com i wypisz tytuły wszystkich książek.” (`crawl` – po wielu
+  podstronach jednej domeny, 1 strona na sekundę, z `robots.txt`; limit domyślnie 20, maksymalnie 200)
 
 Agent sam wybiera narzędzia: `navigate` otwiera stronę, `read` czyta tekst, `extract` wyciąga dane selektorem,
 `type`/`click` wypełniają formularze.

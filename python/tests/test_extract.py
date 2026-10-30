@@ -97,3 +97,11 @@ def test_adresy_prywatne():
     for a in ["127.0.0.1", "10.1.2.3", "172.16.0.1", "192.168.1.1", "169.254.169.254", "100.64.0.1", "::1", "fd00::1", "::ffff:10.0.0.1"]:
         assert prywatny(ipaddress.ip_address(a)), a
     assert not prywatny(ipaddress.ip_address("93.184.216.34"))
+
+
+def test_crawl_linki():
+    # Linki tylko z prefiksu, bez fragmentów, plików i duplikatów
+    from ai_browser.crawl import linki
+    html = ('<a href="/a#x">1</a><a href="/a">2</a><a href="https://inna.pl/b">3</a>'
+            '<a href="/obraz.png">4</a><a href="mailto:x@y.pl">5</a><a href="b?p=2">6</a>')
+    assert linki(html, "https://ex.com/dir/", "https://ex.com/") == ["https://ex.com/a", "https://ex.com/dir/b?p=2"]

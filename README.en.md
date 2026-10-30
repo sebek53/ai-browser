@@ -5,7 +5,7 @@
 A lightweight browser for AI agents (MCP server). Instead of screenshots or raw HTML
 it returns compact text, so the agent uses far fewer tokens.
 
-Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`.
 
 ## Installation
 

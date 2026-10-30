@@ -19,7 +19,7 @@ so the agent uses far fewer tokens.
 - **Safe:** blocks internal network addresses, marks page content as untrusted (prompt injection protection),
   respects `robots.txt`.
 
-Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`.
+Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `select`, `back`, `crawl`.
 
 ## Installation
 
@@ -120,6 +120,8 @@ Just ask the agent in plain language, e.g.:
 - "Open https://books.toscrape.com and list the book titles and prices."
 - "Read this article and summarize it in 5 bullet points: <url>."
 - "Search <site> for X and give me the first 3 results."
+- "Go through 30 pages of https://books.toscrape.com and list all book titles." (`crawl` – many pages of one
+  site, 1 page per second, respecting `robots.txt`; default limit 20, max 200)
 
 The agent picks the tools itself: `navigate` opens a page, `read` reads the text, `extract` pulls data
 with a selector, `type`/`click` fill in forms.
