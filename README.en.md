@@ -34,6 +34,13 @@ Tools: `navigate`, `read`, `tables`, `snapshot`, `extract`, `click`, `type`, `se
 winget install astral-sh.uv
 ```
 
+If you don't have `winget` (older Windows or a work computer), use the official installer – exactly this command,
+with `-ExecutionPolicy ByPass` (allows the script this one time only, does not change system settings):
+
+```
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
 macOS / Linux:
 
 ```
@@ -168,6 +175,9 @@ is checked). Memory use grows to 150–300 MB only while Chromium is running.
 ## Troubleshooting
 
 - **`uvx` is not recognized** – after installing uv, restart the terminal / Claude Desktop.
+- **"PowerShell requires an execution policy…"** when installing uv – run the installer with
+  `-ExecutionPolicy ByPass` (command under "Installation") or use `winget install astral-sh.uv`. There is no need
+  to change system settings with `Set-ExecutionPolicy`.
 - **Claude refuses to install it** – paste the command into your terminal yourself (see "Installation").
 - **"robots.txt tej strony zabrania…"** (robots.txt disallows this page) – the site does not allow bots; look for its official API.
 - **Empty content** – the page works only with JavaScript: enable JS mode with one command (see above).
